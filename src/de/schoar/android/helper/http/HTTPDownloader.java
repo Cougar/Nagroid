@@ -35,7 +35,19 @@ public class HTTPDownloader {
 	}
 
 	public InputStream getBodyAsInputStream() throws HTTPDownloaderException {
-		return getBodyAsInputStream(true);
+		int tries = 0;
+		
+		// retry handling
+		while (true) {
+			try {
+				return getBodyAsInputStream(false);
+			} catch (Exception e) {
+				if (tries > 3)
+					throw new HTTPDownloaderException(e.getMessage() + " (tries: " + tries + ")");
+				else
+					tries++;
+			}
+		}	
 	}
 
 	private InputStream getBodyAsInputStream(boolean retryOnceSSLFix)
@@ -52,6 +64,8 @@ public class HTTPDownloader {
 		HttpURLConnection huc;
 		try {
 			huc = (HttpURLConnection) url.openConnection();
+			huc.setReadTimeout(10 * 1000);
+			huc.setConnectTimeout(10 * 1000);
 		} catch (Exception e) {
 			throw new HTTPDownloaderException("Could not open URL (" + mUrl
 					+ "): " + e.getMessage());

@@ -46,6 +46,9 @@
 		<RingtonePreference 
 			android:key="configuration_notification_alarm_down_unreachable" android:title="Alarm On Down/Unr."
 			android:ringtoneType="all"/>
+		<RingtonePreference 
+			android:key="configuration_notification_alarm_poll_failure" android:title="Alarm On Poll Fail"
+			android:ringtoneType="all"/>
 		
 	</PreferenceCategory>
 
