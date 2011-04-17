@@ -1,6 +1,7 @@
 package de.schoar.android.helper.http;
 
 import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -14,6 +15,7 @@ public class HTTPDownloader {
 	private String mUrl;
 	private String mUser = null;
 	private String mPass = null;
+	private String mPostData = null;
 
 	public HTTPDownloader(String url) {
 		mUrl = url;
@@ -23,6 +25,13 @@ public class HTTPDownloader {
 		this(url);
 		mUser = user;
 		mPass = pass;
+	}
+	
+	public HTTPDownloader(String url, String user, String pass, String postData) {
+		this(url);
+		mUser = user;
+		mPass = pass;
+		mPostData = postData;
 	}
 
 	public InputStream getBodyAsInputStream() throws HTTPDownloaderException {
@@ -52,10 +61,31 @@ public class HTTPDownloader {
 			String credential = Base64.encodeString(mUser + ":" + mPass);
 			huc.setRequestProperty("Authorization", "Basic " + credential);
 		}
+		
+		if (mPostData != null) {
+			try {
+				huc.setRequestMethod("POST");
+				huc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+				huc.setDoInput(true);
+				
+			} catch (Exception e) {
+				throw new HTTPDownloaderException("Could not open URL (" + mUrl
+						+ "): " + e.getMessage());
+			}
+			
+		}
 
 		try {
+			huc.setDoOutput(true);
 			huc.connect();
-
+			
+			if (mPostData != null) {
+				DataOutputStream wr = new DataOutputStream (huc.getOutputStream ());
+				wr.writeBytes(mPostData);
+				wr.flush();
+				wr.close();
+			}
+				
 			int status = huc.getResponseCode();
 			if (retryOnceSSLFix && status == -1) {
 				return getBodyAsInputStream(false);
@@ -89,5 +119,9 @@ public class HTTPDownloader {
 	public String getBodyAsString(String encoding)
 			throws HTTPDownloaderException, UnsupportedEncodingException {
 		return new String(getBodyAsBytes(), encoding);
+	}
+	
+	public void setPostData(String postData) {
+		mPostData = postData;
 	}
 }

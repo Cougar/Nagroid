@@ -30,9 +30,11 @@ public class ConfigurationAccess {
 
 	public static final String POLLING_INTERVAL = "configuration_polling_interval";
 	public static final String POLLING_ENABLED = "configuration_polling_enabled";
+	public static final String POLLING_EXTSTATE = "configuration_polling_extstate";
 
 	public static final String MISC_AUTOSTART = "configuration_misc_autostart";
-	public static final String MISC_UPDATE = "configuration_misc_update";
+	public static final String MISC_DATEFORMAT = "configuration_misc_dateformat";
+	public static final String MISC_SNOOZETIME = "configuration_misc_snoozetime";
 
 	private static final String INTERN_LAST_POLL_TIME = "intern_last_poll_time";
 	private static final String INTERN_LAST_POLL_SUCCESSFULL = "intern_last_poll_successfull";
@@ -126,6 +128,15 @@ public class ConfigurationAccess {
 	public synchronized boolean getPollingEnabled() {
 		return mSharedPreferencesIntern.getBoolean(POLLING_ENABLED, true);
 	}
+	
+	public synchronized boolean getPollingExtState() {
+		return mSharedPreferencesPreference.getBoolean(POLLING_EXTSTATE, false);
+	}
+	
+	public synchronized void setPollingExtState(boolean enable) {
+		mSharedPreferencesPreference.edit()
+				.putBoolean(POLLING_EXTSTATE, enable).commit();
+	}
 
 	public synchronized void setPollingEnabled(boolean enabled, Context ctx) {
 		mSharedPreferencesIntern.edit()
@@ -212,21 +223,21 @@ public class ConfigurationAccess {
 				NOTIFICATION_ALARM_DOWN_UNREACHABLE, uri).commit();
 	}
 
+	public synchronized int getMiscDateFormat() {
+		return mSharedPreferencesPreference.getInt(MISC_DATEFORMAT, 1);
+	}
+
+	public synchronized void setMiscDateFormat(int type, Context ctx) {
+		mSharedPreferencesPreference.edit().putInt(MISC_DATEFORMAT, type)
+				.commit();
+	}
+
 	public synchronized boolean getMiscAutostart() {
 		return mSharedPreferencesPreference.getBoolean(MISC_AUTOSTART, true);
 	}
 
 	public synchronized void setMiscAutostart(boolean bool) {
 		mSharedPreferencesPreference.edit().putBoolean(MISC_AUTOSTART, bool)
-				.commit();
-	}
-
-	public synchronized boolean getMiscUpdate() {
-		return mSharedPreferencesPreference.getBoolean(MISC_UPDATE, true);
-	}
-
-	public synchronized void setMiscUpdate(boolean bool) {
-		mSharedPreferencesPreference.edit().putBoolean(MISC_UPDATE, bool)
 				.commit();
 	}
 
@@ -288,6 +299,15 @@ public class ConfigurationAccess {
 			return new NagiosSite(urlbase, unhandledOnly);
 		}
 		return new NagiosSite(urlbase, user, pass, unhandledOnly);
+	}
+	
+	public synchronized void setSnoozeTime(String snoozeTime) {
+		mSharedPreferencesPreference.edit().putString(
+				MISC_SNOOZETIME, snoozeTime).commit();
+	}
+	public synchronized String getSnoozeTime() {
+		return mSharedPreferencesPreference.getString(
+				MISC_SNOOZETIME, "9:00");
 	}
 
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_margin="5px" android:id="@+id/serviceTvHost"></TextView>
+    <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_margin="5px" android:id="@+id/serviceTvService"></TextView>
+    <TextView android:layout_margin="5px" android:layout_height="wrap_content" android:id="@+id/serviceTvInfo" android:layout_width="fill_parent"></TextView>
+    <Button android:layout_height="wrap_content" android:layout_marginTop="10px" android:id="@+id/serviceBtnSchedCheck" android:layout_width="wrap_content" android:layout_gravity="center" android:drawableLeft="@drawable/restart2" android:text="Schedule Immediate Check" android:width="240px"></Button>
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_gravity="center" android:layout_width="wrap_content">
+        <Button android:layout_height="wrap_content" android:id="@+id/serviceBtnAckProblem" android:layout_width="wrap_content" android:minWidth="120px" android:text="Acknowledge" android:width="120px" android:drawableTop="@drawable/ack2"></Button>
+        <Button android:layout_height="wrap_content" android:id="@+id/serviceBtnChecks" android:layout_width="wrap_content" android:minWidth="120px" android:text="Checks" android:width="120px" android:drawableTop="@drawable/enabled"></Button>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/linearLayout2" android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_gravity="center">
+        <Button android:layout_height="wrap_content" android:id="@+id/serviceBtnNotifications" android:layout_width="wrap_content" android:minWidth="120px" android:text="Notifications" android:width="120px" android:drawableTop="@drawable/disabled"></Button>
+        <Button android:layout_height="wrap_content" android:id="@+id/serviceBtnScheduleDowntime" android:layout_width="wrap_content" android:minWidth="120px" android:text="Downtime" android:width="120px" android:drawableTop="@drawable/downtime_red"></Button>
+    </LinearLayout>
+</LinearLayout>

@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 import de.schoar.nagroid.DM;
 import de.schoar.nagroid.DefaultMenu;
 import de.schoar.nagroid.R;
+import de.schoar.nagroid.dialog.ProblemDialog;
 import de.schoar.nagroid.nagios.NagiosSite;
 import de.schoar.nagroid.nagios.NagiosSiteAdapater;
 import de.schoar.nagroid.nagios.NagiosUpdatedListener;
@@ -35,6 +39,16 @@ public class ProblemsActivity extends Activity implements NagiosUpdatedListener 
 
 		ListView lstSite = (ListView) findViewById(R.id.problemsLstProblems);
 		lstSite.setAdapter(mAdapter);
+		lstSite.setTextFilterEnabled(true);
+
+		lstSite.setOnItemClickListener(new OnItemClickListener() {
+		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		    	Object o = ((ListView) parent).getItemAtPosition(position);
+		    	if(o.getClass() != String.class) {
+		    		new ProblemDialog(view.getContext(), parent, position).show();
+		    	}
+		    }
+		});
 
 		DM.I.getPollHandler().getNagiosPollHandler().addNagiosUpdatedListener(
 				this);

@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import de.schoar.android.helper.misc.DateFormat;
 import de.schoar.nagroid.ConfigurationAccess;
 import de.schoar.nagroid.DM;
 import de.schoar.nagroid.DefaultMenu;
@@ -212,6 +213,25 @@ public class ConfigurationActivity extends PreferenceActivity {
 						return false;
 					}
 				});
+		
+		final CheckBoxPreference cbpPollingExtState = (CheckBoxPreference) findPreference(ConfigurationAccess.POLLING_EXTSTATE);
+		boolean cbpPollingExtStateValue = DM.I.getConfiguration()
+				.getPollingExtState();
+		cbpPollingExtState
+				.setChecked(cbpPollingExtStateValue);
+
+		cbpPollingExtState
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference pref,
+							Object obj) {
+						Boolean bool = (Boolean) obj;
+						DM.I.getConfiguration().setPollingExtState(
+								bool);
+						cbpPollingExtState.setChecked(bool);
+						return false;
+					}
+				});
 
 		// -----
 
@@ -376,19 +396,23 @@ public class ConfigurationActivity extends PreferenceActivity {
 						return false;
 					}
 				});
+		
+		final ListPreference lpMiscDateFormat = (ListPreference) findPreference(ConfigurationAccess.MISC_DATEFORMAT);
 
-		final CheckBoxPreference cbpMiscUpdate = (CheckBoxPreference) findPreference(ConfigurationAccess.MISC_UPDATE);
-		boolean cbpMiscUpdateValue = DM.I.getConfiguration().getMiscUpdate();
-		cbpMiscUpdate.setChecked(cbpMiscUpdateValue);
+		final DateFormat df = DateFormat.toEnum(DM.I.getConfiguration().getMiscDateFormat());
+		setListSummary(lpMiscDateFormat, df.toString());
 
-		cbpMiscUpdate
+		lpMiscDateFormat
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					@Override
 					public boolean onPreferenceChange(Preference pref,
 							Object obj) {
-						Boolean bool = (Boolean) obj;
-						DM.I.getConfiguration().setMiscUpdate(bool);
-						cbpMiscUpdate.setChecked(bool);
+
+						DateFormat type = DateFormat.valueOf(obj.toString()); 
+						setListSummary(lpMiscDateFormat, type.toString());
+
+						DM.I.getConfiguration().setMiscDateFormat(type.getValue(),
+								getApplicationContext());
 						return false;
 					}
 				});
